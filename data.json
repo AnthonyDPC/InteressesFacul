@@ -1,0 +1,77 @@
+{
+  "QUESTIONS": [
+    ["I am the life of the party.", false], ["I feel comfortable around people.", false],
+    ["I start conversations.", false], ["I talk to a lot of different people at parties.", false],
+    ["I don't mind being the center of attention.", false], ["I am quiet around strangers.", true],
+    ["I don't talk a lot.", true], ["I keep in the background.", true], ["I have little to say.", true],
+    ["I don't like to draw attention to myself.", true],
+    ["I feel little concern for others.", true], ["I am interested in people.", false],
+    ["I insult people.", true], ["I sympathize with others' feelings.", false],
+    ["I am not interested in other people's problems.", true], ["I have a soft heart.", false],
+    ["I am not really interested in others.", true], ["I take time out for others.", false],
+    ["I feel others' emotions.", false], ["I make people feel at ease.", false],
+    ["I am always prepared.", false], ["I leave my belongings around.", true],
+    ["I pay attention to details.", false], ["I make a mess of things.", true],
+    ["I get chores done right away.", false], ["I often forget to put things back in their proper place.", true],
+    ["I like order.", false], ["I shirk my duties.", true], ["I follow a schedule.", false],
+    ["I am exacting in my work.", false],
+    ["I get stressed out easily.", false], ["I am relaxed most of the time.", true],
+    ["I worry about things.", false], ["I seldom feel blue.", true],
+    ["I am easily disturbed.", false], ["I get upset easily.", false],
+    ["I change my mood a lot.", false], ["I have frequent mood swings.", false],
+    ["I get irritated easily.", false], ["I often feel blue.", false],
+    ["I have a rich vocabulary.", false], ["I have difficulty understanding abstract ideas.", true],
+    ["I have a vivid imagination.", false], ["I am not interested in abstract ideas.", true],
+    ["I have excellent ideas.", false], ["I do not have a good imagination.", true],
+    ["I am quick to understand things.", false], ["I use difficult words.", false],
+    ["I spend time reflecting on things.", false], ["I am full of ideas.", false]
+  ],
+  "NORM_TABLE": {
+    "E": [15,20,25,30,35,40,42,45,48,50], 
+    "A": [18,22,26,30,34,38,40,42,45,48],
+    "C": [20,25,30,35,38,40,42,45,48,50], 
+    "N": [25,30,35,38,40,42,45,48,50,50],
+    "O": [22,27,32,36,40,42,45,48,49,50]
+  },
+  "INTEREST_QUESTIONS": [
+    "Repair cars or trucks", "Work with tools and machinery", "Do woodworking", "Construct new buildings", "Operate heavy equipment",
+    "Design a laboratory experiment", "Solve complex puzzles", "Develop a computer program", "Carry out medical research", "Explain scientific concepts to others",
+    "Create works of art", "Write short stories or novels", "Design Internet web pages", "Act in a play", "Play an instrument in an orchestra",
+    "Help others learn new ideas", "Counsel persons who need help", "Care for sick people", "Teach children", "Provide comfort and support to others",
+    "Lead other people", "Persuade others to buy something", "Plan an advertising campaign", "Make important decisions affecting many people", "Organize a political campaign",
+    "Keep detailed records", "Manage a computer database", "Plan budgets", "Develop an office filing system", "Monitor business expenses"
+  ],
+  "RIASEC_MAPPING": {
+    "R": ["Repair cars or trucks", "Work with tools and machinery", "Do woodworking", "Construct new buildings", "Operate heavy equipment"],
+    "I": ["Design a laboratory experiment", "Solve complex puzzles", "Develop a computer program", "Carry out medical research", "Explain scientific concepts to others"],
+    "A": ["Create works of art", "Write short stories or novels", "Design Internet web pages", "Act in a play", "Play an instrument in an orchestra"],
+    "S": ["Help others learn new ideas", "Counsel persons who need help", "Care for sick people", "Teach children", "Provide comfort and support to others"],
+    "E": ["Lead other people", "Persuade others to buy something", "Plan an advertising campaign", "Make important decisions affecting many people", "Organize a political campaign"],
+    "C": ["Keep detailed records", "Manage a computer database", "Plan budgets", "Develop an office filing system", "Monitor business expenses"]
+  },
+  "MAJORS_DATABASE": [
+    {"name": "Medicina", "riasec": "IS", "bigfive": {"O":80,"C":90,"A":85,"E":60,"N":40}, "corte_medio": 810, "dificuldade": "Altíssima concorrência, carga de estudos exaustiva"},
+    {"name": "Direito", "riasec": "SE", "bigfive": {"O":75,"C":80,"A":70,"E":75,"N":50}, "corte_medio": 730, "dificuldade": "Muita leitura teórica e necessidade de articulação"},
+    {"name": "Engenharia de Computação", "riasec": "IC", "bigfive": {"O":85,"C":85,"A":40,"E":55,"N":45}, "corte_medio": 760, "dificuldade": "Alta exigência em matemática e raciocínio lógico"},
+    {"name": "Psicologia", "riasec": "SA", "bigfive": {"O":80,"C":70,"A":90,"E":65,"N":60}, "corte_medio": 740, "dificuldade": "Exige alta empatia e inteligência emocional"},
+    {"name": "Administração", "riasec": "EC", "bigfive": {"O":65,"C":80,"A":60,"E":80,"N":50}, "corte_medio": 640, "dificuldade": "Fácil entrada, mas exige proatividade para destaque"},
+    
+    {"name": "Odontologia", "riasec": "IR", "bigfive": {"O":70,"C":85,"A":80,"E":65,"N":45}, "corte_medio": 750, "dificuldade": "Exige habilidade manual fina e alto investimento financeiro"},
+    {"name": "Arquitetura e Urbanismo", "riasec": "AI", "bigfive": {"O":90,"C":80,"A":60,"E":60,"N":50}, "corte_medio": 730, "dificuldade": "Carga horária pesada em projetos e criatividade técnica"},
+    {"name": "Engenharia Civil", "riasec": "RC", "bigfive": {"O":65,"C":85,"A":50,"E":65,"N":40}, "corte_medio": 720, "dificuldade": "Forte base em física e cálculos estruturais"},
+    {"name": "Enfermagem", "riasec": "SA", "bigfive": {"O":60,"C":85,"A":90,"E":70,"N":50}, "corte_medio": 700, "dificuldade": "Carga de trabalho intensa e contato direto com sofrimento"},
+    {"name": "Jornalismo", "riasec": "EA", "bigfive": {"O":85,"C":65,"A":70,"E":85,"N":55}, "corte_medio": 680, "dificuldade": "Exige excelente comunicação, leitura e adaptabilidade"},
+    
+    {"name": "Ciências Contábeis", "riasec": "CE", "bigfive": {"O":40,"C":95,"A":55,"E":60,"N":40}, "corte_medio": 640, "dificuldade": "Trabalho muito metódico, rotineiro e focado em regras"},
+    {"name": "Pedagogia", "riasec": "SA", "bigfive": {"O":70,"C":75,"A":90,"E":75,"N":55}, "corte_medio": 600, "dificuldade": "Exige muita paciência e didática com grupos"},
+    {"name": "Relações Internacionais", "riasec": "ES", "bigfive": {"O":85,"C":75,"A":70,"E":80,"N":45}, "corte_medio": 740, "dificuldade": "Exige fluência em idiomas e muita leitura política/histórica"},
+    {"name": "Design Gráfico", "riasec": "AE", "bigfive": {"O":90,"C":60,"A":65,"E":65,"N":50}, "corte_medio": 690, "dificuldade": "Mercado competitivo, exige portfólio e criatividade contínua"},
+    {"name": "Fisioterapia", "riasec": "SR", "bigfive": {"O":65,"C":80,"A":90,"E":70,"N":45}, "corte_medio": 710, "dificuldade": "Exige esforço físico e estudo contínuo de anatomia"},
+    
+    {"name": "Medicina Veterinária", "riasec": "IR", "bigfive": {"O":75,"C":80,"A":85,"E":60,"N":40}, "corte_medio": 740, "dificuldade": "Carga teórica pesada e lidar com donos de pets/fazendas"},
+    {"name": "Letras", "riasec": "AS", "bigfive": {"O":85,"C":70,"A":80,"E":50,"N":55}, "corte_medio": 630, "dificuldade": "Extrema carga de leitura, voltado para licenciatura ou pesquisa"},
+    {"name": "Educação Física", "riasec": "SR", "bigfive": {"O":60,"C":70,"A":80,"E":85,"N":40}, "corte_medio": 620, "dificuldade": "Exige energia física e sociabilidade constante"},
+    {"name": "Ciência de Dados", "riasec": "IC", "bigfive": {"O":85,"C":85,"A":45,"E":40,"N":45}, "corte_medio": 750, "dificuldade": "Muita matemática, estatística e horas em frente ao PC"},
+    {"name": "Gastronomia", "riasec": "AR", "bigfive": {"O":80,"C":75,"A":65,"E":70,"N":55}, "corte_medio": 650, "dificuldade": "Trabalho sob alta pressão, rotina fisicamente desgastante"}
+  ]
+}

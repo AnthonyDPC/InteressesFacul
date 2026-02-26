@@ -1,315 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Big Five Personality Test</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-            background: #fbfbfd;
-            color: #1d1d1f;
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            padding-bottom: 60px;
-        }
-
-        .container {
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 48px;
-            padding-bottom: 32px;
-            border-bottom: 1px solid #d2d2d7;
-        }
-
-        h1 {
-            font-size: 40px;
-            font-weight: 600;
-            letter-spacing: -0.015em;
-            margin-bottom: 12px;
-            color: #1d1d1f;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: #e8e8ed;
-            border-radius: 2px;
-            margin-top: 24px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #0071e3;
-            width: 0%;
-            transition: width 0.3s ease;
-            border-radius: 2px;
-        }
-
-        .question {
-            background: #ffffff;
-            border-radius: 18px;
-            padding: 32px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .question:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
-        }
-
-        .question p {
-            font-size: 17px;
-            font-weight: 500;
-            color: #1d1d1f;
-            margin-bottom: 20px;
-            letter-spacing: -0.01em;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .options label {
-            display: flex;
-            align-items: center;
-            padding: 14px 18px;
-            background: #f5f5f7;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 15px;
-            color: #1d1d1f;
-            border: 2px solid transparent;
-        }
-
-        .options label:hover {
-            background: #e8e8ed;
-        }
-
-        .options input[type="radio"] {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #d2d2d7;
-            border-radius: 50%;
-            margin-right: 12px;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.2s ease;
-            flex-shrink: 0;
-        }
-
-        .options input[type="radio"]:checked {
-            border-color: #0071e3;
-            background: #0071e3;
-        }
-
-        .options input[type="radio"]:checked::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 8px;
-            height: 8px;
-            background: white;
-            border-radius: 50%;
-        }
-
-        .options label:has(input[type="radio"]:checked) {
-            background: #e3f2ff;
-            border-color: #0071e3;
-        }
-
-        .submit-container {
-            position: sticky;
-            bottom: 0;
-            background: linear-gradient(to top, #fbfbfd 80%, transparent);
-            padding: 32px 0 20px;
-            margin-top: 40px;
-            text-align: center;
-        }
-
-        button[type="submit"] {
-            background: #0071e3;
-            color: #ffffff;
-            border: none;
-            padding: 14px 40px;
-            border-radius: 980px;
-            font-size: 17px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            letter-spacing: -0.01em;
-            box-shadow: 0 2px 8px rgba(0, 113, 227, 0.25);
-        }
-
-        button[type="submit"]:hover {
-            background: #0077ed;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
-        }
-
-        button[type="submit"]:active {
-            background: #006edb;
-            transform: translateY(0);
-        }
-
-        button[type="submit"]:disabled {
-            background: #f5f5f7;
-            color: #86868b;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 24px 16px;
-            }
-
-            h1 {
-                font-size: 32px;
-            }
-
-            .question {
-                padding: 24px 20px;
-            }
-
-            .question p {
-                font-size: 16px;
-            }
-
-            .options label {
-                font-size: 14px;
-                padding: 12px 16px;
-            }
-        }
-
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: #000000;
-                color: #f5f5f7;
-            }
-
-            header {
-                border-bottom-color: #424245;
-            }
-
-            h1 {
-                color: #f5f5f7;
-            }
-
-            .progress-bar {
-                background: #2d2d2f;
-            }
-
-            .question {
-                background: #1d1d1f;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-            }
-
-            .question:hover {
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
-            }
-
-            .question p {
-                color: #f5f5f7;
-            }
-
-            .options label {
-                background: #2d2d2f;
-                color: #f5f5f7;
-            }
-
-            .options label:hover {
-                background: #3d3d3f;
-            }
-
-            .options input[type="radio"] {
-                border-color: #6e6e73;
-            }
-
-            .options input[type="radio"]:checked {
-                border-color: #0a84ff;
-                background: #0a84ff;
-            }
-
-            .options label:has(input[type="radio"]:checked) {
-                background: #1a3a52;
-                border-color: #0a84ff;
-            }
-
-            .submit-container {
-                background: linear-gradient(to top, #000000 80%, transparent);
-            }
-
-            button[type="submit"]:disabled {
-                background: #2d2d2f;
-                color: #6e6e73;
-            }
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Five - InteressesFacul</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="container">
-    <h1>Big Five Personality Test (50 questions)</h1>
-    <form method="POST">
-        {% for i, (q, _) in questions %}
-        <div class="question">
-            <p>{{ i+1 }}. {{ q }}</p>
-            <div class="options">
-                <label><input type="radio" name="q{{ i }}" value="1" required> Very Inaccurate</label>
-                <label><input type="radio" name="q{{ i }}" value="2"> Inaccurate</label>
-                <label><input type="radio" name="q{{ i }}" value="3"> Neither</label>
-                <label><input type="radio" name="q{{ i }}" value="4"> Accurate</label>
-                <label><input type="radio" name="q{{ i }}" value="5"> Very Accurate</label>
+<body class="bg-zinc-950 text-zinc-100">
+    <div class="max-w-3xl mx-auto p-8">
+        <h1 class="text-4xl font-bold text-center mb-8">Teste Big Five • Personalidade</h1>
+        <p class="text-center text-zinc-400 mb-10">Responda com sinceridade (1 = Discordo totalmente • 5 = Concordo totalmente)</p>
+
+        <form method="POST" class="space-y-10">
+            {% for i, (question, _) in questions %}
+            <div class="bg-zinc-900 p-8 rounded-3xl">
+                <p class="text-lg leading-relaxed mb-6">{{ question }}</p>
+                <div class="grid grid-cols-5 gap-4">
+                    {% for score in range(1,6) %}
+                    <label class="flex flex-col items-center cursor-pointer">
+                        <input type="radio" name="q{{ i }}" value="{{ score }}" class="peer hidden">
+                        <div class="w-12 h-12 flex items-center justify-center text-2xl font-bold bg-zinc-800 peer-checked:bg-emerald-500 peer-checked:text-black rounded-2xl transition-all">
+                            {{ score }}
+                        </div>
+                        <span class="text-xs mt-2 text-zinc-400">
+                            {% if score == 1 %}Discordo totalmente{% elif score == 5 %}Concordo totalmente{% endif %}
+                        </span>
+                    </label>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-        {% endfor %}
-        <button type="submit">Show My Personality</button>
-    </form>
-</div>
-<script>
-    const questions = document.querySelectorAll('.question');
-    const progressBar = document.getElementById('progressBar');
-    const submitBtn = document.getElementById('submitBtn');
-    
-    function updateProgress() {
-        const totalQuestions = questions.length;
-        let answeredQuestions = 0;
-        
-        questions.forEach(question => {
-            const radios = question.querySelectorAll('input[type="radio"]');
-            const isAnswered = Array.from(radios).some(radio => radio.checked);
-            if (isAnswered) answeredQuestions++;
-        });
-        
-        const progress = (answeredQuestions / totalQuestions) * 100;
-        progressBar.style.width = progress + '%';
-        
-        submitBtn.disabled = answeredQuestions < totalQuestions;
-    }
-    
-    document.querySelectorAll('input[type="radio"]').forEach(radio => {
-        radio.addEventListener('change', updateProgress);
-    });
-    
-    updateProgress();
-</script>
+            {% endfor %}
+
+            <button type="submit" 
+                    class="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-bold py-6 text-2xl rounded-3xl transition-all">
+                Concluir Big Five →
+            </button>
+        </form>
+    </div>
 </body>
 </html>

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seus Resultados - InteressesFacul</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body class="bg-zinc-950 text-zinc-100">
+    <div class="max-w-5xl mx-auto p-8">
+      <h1 class="text-5xl font-bold text-center mb-4">
+        🎉 Seus resultados completos
+      </h1>
+      <p class="text-center text-zinc-400 text-xl mb-12">
+        Aqui estão suas recomendações de cursos!
+      </p>
+
+      <!-- Gráficos -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+        <div class="bg-zinc-900 p-8 rounded-3xl">
+          <h2 class="text-2xl font-semibold mb-6">Big Five (Personalidade)</h2>
+          <canvas id="bigfiveChart" height="180"></canvas>
+        </div>
+        <div class="bg-zinc-900 p-8 rounded-3xl">
+          <h2 class="text-2xl font-semibold mb-6">Interesses RIASEC</h2>
+          <canvas id="riasecChart" height="180"></canvas>
+        </div>
+      </div>
+
+      <!-- Cursos recomendados -->
+      <div class="mb-16">
+        <h2 class="text-3xl font-bold text-emerald-400 mb-8">
+          ✅ Cursos que mais combinam com você
+        </h2>
+        <p class="text-zinc-400 mb-6">
+          Sua nota ENEM:
+          <span class="font-bold text-amber-400"
+            >{{ session.enem|default(0) }}</span
+          >
+        </p>
+        <div class="grid gap-6">
+          {% for curso in top_jobs %}
+          <div
+            class="bg-zinc-900 p-8 rounded-3xl border-l-8 {{ curso.color }} border-opacity-70"
+          >
+            <h3 class="text-3xl font-semibold mb-2">{{ curso.name }}</h3>
+            <p class="text-xl {{ curso.color }} mb-2">{{ curso.status }}</p>
+            <p class="text-zinc-400">
+              Nota de corte média aproximada: {{ curso.corte }} pontos
+            </p>
+            <p class="text-zinc-500 mt-2">
+              Dificuldade esperada: {{ curso.dificuldade }}
+            </p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Similar pros ruins, se quiser mostrar -->
+
+      <!-- Cursos que não combinam -->
+      <div>
+        <h2 class="text-3xl font-bold text-red-400 mb-8">
+          ❌ Cursos que não são ideais
+        </h2>
+        <div class="grid gap-6">
+          {% for course in bad_fits %}
+          <div
+            class="bg-red-900/30 border border-red-500 p-8 rounded-3xl opacity-75"
+          >
+            <h3 class="text-3xl font-semibold">{{ course.name }}</h3>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="text-center mt-16">
+        <a href="/" class="text-emerald-400 hover:underline"
+          >← Voltar ao início e refazer</a
+        >
+      </div>
+    </div>
+
+    <script>
+      // Big Five Radar
+      new Chart(document.getElementById('bigfiveChart'), {
+          type: 'radar',
+          data: {
+              labels: ['Extroversão', 'Amabilidade', 'Conscienciosidade', 'Neuroticismo', 'Abertura'],
+              datasets: [{
+                  label: 'Seu perfil',
+                  data: [{{ bigfive.E|default(50) }}, {{ bigfive.A|default(50) }}, {{ bigfive.C|default(50) }}, {{ bigfive.N|default(50) }}, {{ bigfive.O|default(50) }}],
+                  backgroundColor: 'rgba(16, 185, 129, 0.3)',
+                  borderColor: '#10b981',
+                  borderWidth: 3
+              }]
+          },
+          options: { scales: { r: { min: 0, max: 100 }} }
+      });
+
+      // RIASEC Bar
+      new Chart(document.getElementById('riasecChart'), {
+          type: 'bar',
+          data: {
+              labels: ['Realista', 'Investigativo', 'Artístico', 'Social', 'Empreendedor', 'Convencional'],
+              datasets: [{
+                  label: 'Seu interesse',
+                  data: [70,85,60,75,55,40],  // exemplo - substitua pelas variáveis reais depois
+                  backgroundColor: '#ec4899'
+              }]
+          }
+      });
+    </script>
+  </body>
+</html>
