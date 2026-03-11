@@ -7,8 +7,6 @@ app = Flask(__name__)
 app.secret_key = secrets.token_hex(24)
 
 # ====================== CARREGAR DADOS (JSON) ======================
-# Usamos app.root_path para garantir que o Flask encontre o arquivo 
-# independentemente de onde o script seja executado no terminal.
 json_path = os.path.join(app.root_path, 'data.json')
 
 with open(json_path, 'r', encoding='utf-8') as f:
@@ -29,7 +27,7 @@ def calculate_bigfive(answers):
         trait = "EACNO"[i // 10]
         scores[trait] += val
         
-    # Cálculo simples de "percentil" baseado no max score de 50 por traço para a lógica funcionar
+    # Cálculo simples de "percentil" baseado no max score de 50 por traço
     perc = {trait: (score / 50) * 100 for trait, score in scores.items()}
     return scores, perc
 
