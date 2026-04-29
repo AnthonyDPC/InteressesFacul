@@ -4,66 +4,344 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InteressesFacul</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f5f5f7;
+            --surface: rgba(255,255,255,0.05);
+            --surface-hover: rgba(255,255,255,0.09);
+            --border: rgba(255,255,255,0.10);
+            --border-hover: rgba(255,255,255,0.22);
+            --text-primary: #000000;
+            --text-secondary: #1d1d1f;
+            --text-tertiary: #6e6e73;
+            --accent: #0a84ff;
+            --accent-soft: rgba(10,132,255,0.15);
+            --green: #30d158;
+            --green-soft: rgba(48,209,88,0.15);
+            --amber: #ffd60a;
+            --pink: #ff375f;
+            --radius: 20px;
+            --radius-lg: 28px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background glow orbs */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.35;
+        }
+        body::before {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, #0a84ff 0%, transparent 70%);
+            top: -200px; left: -200px;
+        }
+        body::after {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #30d158 0%, transparent 70%);
+            bottom: -150px; right: -150px;
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 80px 24px 60px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 64px;
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .logo-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-soft);
+            border: 1px solid rgba(10,132,255,0.3);
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.02em;
+            margin-bottom: 24px;
+        }
+        .logo-pill span { font-size: 16px; }
+
+        .header h1 {
+            font-size: clamp(42px, 8vw, 64px);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            background-color: #1d1d1f;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        /* Cards */
+        .cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            background: var(--surface);
+            border: 2px solid black;
+            border-radius: var(--radius-lg);
+            padding: 24px 28px;
+            text-decoration: none;
+            color: inherit;
+            transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+            animation: fadeUp 0.7s ease both;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            
+        }
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.18s; }
+        .card:nth-child(3) { animation-delay: 0.26s; }
+
+        .card:hover {
+            background: var(--surface-hover);
+            border: 2px solid #0a84ff;
+            transform: translateY(-2px);
+        }
+        .card:active { transform: translateY(0); }
+
+        .card-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .icon-wrap {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        .icon-blue  { background: rgba(10,132,255,0.15); }
+        .icon-pink  { background: rgba(255,55,95,0.15); }
+        .icon-amber { background: rgba(255,214,10,0.12); }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-bottom: 3px;
+        }
+        .card-sub {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .card-arrow {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            transition: background 0.2s, color 0.2s;
+        }
+        .card:hover .card-arrow {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        /* Progress */
+        .progress-section {
+            text-align: center;
+            animation: fadeUp 0.7s 0.35s ease both;
+        }
+
+        .progress-bar-wrap {
+            height: 4px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 100px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 100px;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
+        }
+
+        .progress-label {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            margin-bottom: 24px;
+        }
+        .progress-label strong { color: var(--green); }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--green);
+            color: #000;
+            font-weight: 700;
+            font-size: 17px;
+            letter-spacing: -0.01em;
+            padding: 18px 40px;
+            border-radius: 100px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 0 40px rgba(48,209,88,0.3);
+        }
+        .cta-btn:hover { opacity: 0.88; transform: scale(1.02); }
+        .cta-btn:active { transform: scale(0.99); }
+
+        /* Completed badge */
+        .completed-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--green-soft);
+            border: 1px solid rgba(48,209,88,0.25);
+            border-radius: 100px;
+            padding: 3px 12px 3px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--green);
+            margin-top: 6px;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Flash messages */
+        .flash {
+            margin-bottom: 20px;
+            padding: 14px 20px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 500;
+            animation: fadeUp 0.4s ease both;
+        }
+        .flash.success { background: var(--green-soft); border: 1px solid rgba(48,209,88,0.3); color: var(--green); }
+        .flash.danger  { background: rgba(255,55,95,0.12); border: 1px solid rgba(255,55,95,0.3); color: var(--pink); }
+        .flash.warning { background: rgba(255,214,10,0.10); border: 1px solid rgba(255,214,10,0.3); color: var(--amber); }
+    </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 min-h-screen">
-    <div class="max-w-2xl mx-auto pt-12 px-6">
-        <div class="text-center mb-12">
-            <h1 class="text-6xl font-bold text-emerald-400 mb-3">InteressesFacul</h1>
-            <p class="text-2xl text-zinc-400">Descubra seu curso ideal em 3 testes rápidos</p>
+<body>
+    <div class="wrapper">
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for cat, msg in messages %}
+            <div class="flash {{ cat }}">{{ msg }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <header class="header">
+            <div class="logo-pill">
+                <span>✦</span> Orientação de Carreira
+            </div>
+            <h1>InteressesFacul</h1>
+            <p>Descubra seu curso ideal<br>em 3 testes rápidos.</p>
+        </header>
+
+        <div class="cards">
+            <a href="/bigfive" class="card">
+                <div class="card-left">
+                    <div class="icon-wrap icon-blue">🧠</div>
+                    <div>
+                        <div class="card-title">Big Five</div>
+                        <div class="card-sub">Personalidade · 50 perguntas</div>
+                        {% if "bigfive" in completed %}
+                        <div class="completed-badge">✓ Concluído</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <a href="/interesses" class="card">
+                <div class="card-left">
+                    <div class="icon-wrap icon-pink">❤️</div>
+                    <div>
+                        <div class="card-title">Interesses RIASEC</div>
+                        <div class="card-sub">O que você gosta · 30 perguntas</div>
+                        {% if "interesses" in completed %}
+                        <div class="completed-badge">✓ Concluído</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <a href="/enem" class="card">
+                <div class="card-left">
+                    <div class="icon-wrap icon-amber">💡</div>
+                    <div>
+                        <div class="card-title">Nota do ENEM</div>
+                        <div class="card-sub">Informe sua pontuação</div>
+                        {% if "enem" in completed %}
+                        <div class="completed-badge">✓ Concluído</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
         </div>
 
-        <div class="grid gap-6">
-            <a href="/bigfive" 
-               class="group bg-zinc-900 hover:bg-zinc-800 p-8 rounded-3xl flex items-center justify-between transition-all">
-                <div>
-                    <div class="flex items-center gap-4">
-                        <i class="fa-solid fa-brain text-4xl text-blue-400"></i>
-                        <div>
-                            <h2 class="text-2xl font-semibold">1. Big Five</h2>
-                            <p class="text-zinc-400">Personalidade (50 perguntas)</p>
-                        </div>
-                    </div>
-                </div>
-                <i class="fa-solid fa-arrow-right text-3xl group-hover:translate-x-2 transition"></i>
-            </a>
-
-            <a href="/interesses" 
-               class="group bg-zinc-900 hover:bg-zinc-800 p-8 rounded-3xl flex items-center justify-between transition-all">
-                <div>
-                    <div class="flex items-center gap-4">
-                        <i class="fa-solid fa-heart text-4xl text-pink-400"></i>
-                        <div>
-                            <h2 class="text-2xl font-semibold">2. Interesses (RIASEC)</h2>
-                            <p class="text-zinc-400">30 perguntas sobre o que você gosta</p>
-                        </div>
-                    </div>
-                </div>
-                <i class="fa-solid fa-arrow-right text-3xl group-hover:translate-x-2 transition"></i>
-            </a>
-
-            <a href="/enem" 
-               class="group bg-zinc-900 hover:bg-zinc-800 p-8 rounded-3xl flex items-center justify-between transition-all">
-                <div>
-                    <div class="flex items-center gap-4">
-                        <i class="fa-solid fa-lightbulb text-4xl text-amber-400"></i>
-                        <div>
-                            <h2 class="text-2xl font-semibold">3. ENEM</h2>
-                        </div>
-                    </div>
-                </div>
-                <i class="fa-solid fa-arrow-right text-3xl group-hover:translate-x-2 transition"></i>
-            </a>
-        </div>
-
-        <div class="mt-12 text-center">
+        <div class="progress-section">
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" style="width: {{ (progress / 3 * 100)|round }}%"></div>
+            </div>
             {% if progress == 3 %}
-            <a href="/final" class="inline-block bg-emerald-500 hover:bg-emerald-600 text-black font-bold text-2xl px-16 py-6 rounded-3xl transition-all">
-                🎉 VER MINHAS RECOMENDAÇÕES FINAIS
-            </a>
+            <a href="/final" class="cta-btn">🎉 Ver minhas recomendações</a>
             {% else %}
-            <p class="text-zinc-500 text-xl">Progresso: <span class="font-bold text-emerald-400">{{ progress }}/3</span></p>
+            <p class="progress-label">Progresso: <strong>{{ progress }} de 3</strong> testes concluídos</p>
             {% endif %}
         </div>
     </div>

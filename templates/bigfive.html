@@ -3,39 +3,447 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Big Five - InteressesFacul</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Big Five — InteressesFacul</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f5f5f7;
+            --surface: rgba(255,255,255,0.60);
+            --surface-hover: rgba(255,255,255,0.80);
+            --border: rgba(0,0,0,1);
+            --border-hover: #0a84ff;
+            --text-primary: #000000;
+            --text-secondary: #1d1d1f;
+            --text-tertiary: #6e6e73;
+            --accent: #0a84ff;
+            --accent-soft: rgba(10,132,255,0.12);
+            --green: #30d158;
+            --green-soft: rgba(48,209,88,0.15);
+            --pink: #ff375f;
+            --amber: #ffd60a;
+            --radius-lg: 28px;
+            --radius: 20px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.35;
+        }
+        body::before {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, #0a84ff 0%, transparent 70%);
+            top: -200px; left: -200px;
+        }
+        body::after {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #30d158 0%, transparent 70%);
+            bottom: -150px; right: -150px;
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 64px 24px 80px;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent);
+            text-decoration: none;
+            margin-bottom: 40px;
+            animation: fadeUp 0.5s ease both;
+            transition: opacity 0.2s;
+        }
+        .back-link:hover { opacity: 0.7; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeUp 0.7s 0.05s ease both;
+        }
+
+        .logo-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-soft);
+            border: 1px solid rgba(10,132,255,0.3);
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: clamp(28px, 5vw, 44px);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            background-color: #1d1d1f;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 15px;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+
+        /* Progress bar */
+        .sticky-progress {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(245,245,247,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 12px 0;
+            margin-bottom: 32px;
+            animation: fadeUp 0.7s 0.1s ease both;
+        }
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            margin-bottom: 8px;
+        }
+        .progress-info span { color: var(--accent); }
+        .progress-bar-wrap {
+            height: 4px;
+            background: rgba(0,0,0,0.08);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 100px;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            transition: width 0.4s ease;
+        }
+
+        /* Scale legend */
+        .scale-legend {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 28px;
+            padding: 14px 20px;
+            background: var(--surface);
+            border: 2px solid black;
+            border-radius: var(--radius);
+            backdrop-filter: blur(20px);
+            animation: fadeUp 0.7s 0.12s ease both;
+        }
+        .scale-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+        .scale-num {
+            width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            background: rgba(0,0,0,0.07);
+            color: var(--text-secondary);
+        }
+        .scale-divider { flex: 1; height: 1px; background: rgba(0,0,0,0.08); }
+
+        /* Question cards */
+        .questions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .question-card {
+            background: var(--surface);
+            border: 2px solid black;
+            border-radius: var(--radius-lg);
+            padding: 24px 28px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: border-color 0.2s, background 0.2s;
+            animation: fadeUp 0.6s ease both;
+        }
+        .question-card.answered {
+            border-color: var(--accent);
+            background: rgba(10,132,255,0.04);
+        }
+
+        .question-num {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        /* Radio group */
+        .radio-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .radio-label {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .radio-label input[type="radio"] { display: none; }
+
+        .radio-btn {
+            width: 100%;
+            aspect-ratio: 1;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            font-weight: 700;
+            background: rgba(0,0,0,0.06);
+            border-radius: 14px;
+            color: var(--text-secondary);
+            border: 2px solid transparent;
+            transition: background 0.15s, border-color 0.15s, transform 0.1s;
+        }
+
+        .radio-label input:checked + .radio-btn {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+            transform: scale(1.08);
+        }
+
+        .radio-label:hover .radio-btn {
+            background: rgba(10,132,255,0.12);
+            border-color: rgba(10,132,255,0.3);
+        }
+
+        .radio-hint {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* Trait divider */
+        .trait-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0 16px;
+            animation: fadeUp 0.5s ease both;
+        }
+        .trait-divider-line { flex: 1; height: 1px; background: rgba(0,0,0,0.1); }
+        .trait-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 14px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            background: rgba(0,0,0,0.07);
+            color: var(--text-tertiary);
+        }
+
+        /* Submit */
+        .submit-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #000;
+            color: #fff;
+            font-family: 'Figtree', sans-serif;
+            font-weight: 700;
+            font-size: 17px;
+            letter-spacing: -0.01em;
+            padding: 20px 40px;
+            border-radius: var(--radius-lg);
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            animation: fadeUp 0.7s 0.3s ease both;
+        }
+        .submit-btn:hover { opacity: 0.82; transform: translateY(-1px); }
+        .submit-btn:active { transform: translateY(0); opacity: 1; }
+
+        /* Flash */
+        .flash {
+            margin-bottom: 20px;
+            padding: 14px 20px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 500;
+            animation: fadeUp 0.4s ease both;
+        }
+        .flash.success { background: var(--green-soft); border: 1px solid rgba(48,209,88,0.3); color: #1a7a35; }
+        .flash.danger  { background: rgba(255,55,95,0.10); border: 1px solid rgba(255,55,95,0.3); color: var(--pink); }
+        .flash.warning { background: rgba(255,214,10,0.10); border: 1px solid rgba(255,214,10,0.3); color: #8a6c00; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100">
-    <div class="max-w-3xl mx-auto p-8">
-        <h1 class="text-4xl font-bold text-center mb-8">Teste Big Five • Personalidade</h1>
-        <p class="text-center text-zinc-400 mb-10">Responda com sinceridade (1 = Discordo totalmente • 5 = Concordo totalmente)</p>
+<body>
+    <div class="wrapper">
 
-        <form method="POST" class="space-y-10">
-            {% for i, (question, _) in questions %}
-            <div class="bg-zinc-900 p-8 rounded-3xl">
-                <p class="text-lg leading-relaxed mb-6">{{ question }}</p>
-                <div class="grid grid-cols-5 gap-4">
-                    {% for score in range(1,6) %}
-                    <label class="flex flex-col items-center cursor-pointer">
-                        <input type="radio" name="q{{ i }}" value="{{ score }}" class="peer hidden">
-                        <div class="w-12 h-12 flex items-center justify-center text-2xl font-bold bg-zinc-800 peer-checked:bg-emerald-500 peer-checked:text-black rounded-2xl transition-all">
-                            {{ score }}
-                        </div>
-                        <span class="text-xs mt-2 text-zinc-400">
-                            {% if score == 1 %}Discordo totalmente{% elif score == 5 %}Concordo totalmente{% endif %}
-                        </span>
-                    </label>
-                    {% endfor %}
-                </div>
-            </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for cat, msg in messages %}
+            <div class="flash {{ cat }}">{{ msg }}</div>
             {% endfor %}
+        {% endif %}
+        {% endwith %}
 
-            <button type="submit" 
-                    class="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-bold py-6 text-2xl rounded-3xl transition-all">
-                Concluir Big Five →
-            </button>
+        <a href="/" class="back-link">← Voltar ao início</a>
+
+        <header class="header">
+            <div class="logo-pill">🧠 Passo 1 de 3</div>
+            <h1>Big Five · Personalidade</h1>
+            <p>Responda com sinceridade. Não existe resposta certa ou errada.</p>
+        </header>
+
+        <!-- Sticky progress -->
+        <div class="sticky-progress">
+            <div class="progress-info">
+                <span id="progress-label">0 de 50 respondidas</span>
+                <span id="progress-pct">0%</span>
+            </div>
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Scale legend -->
+        <div class="scale-legend">
+            <div class="scale-legend-item"><div class="scale-num">1</div> Discordo totalmente</div>
+            <div class="scale-divider"></div>
+            <div class="scale-legend-item"><div class="scale-num">3</div> Neutro</div>
+            <div class="scale-divider"></div>
+            <div class="scale-legend-item">Concordo totalmente <div class="scale-num">5</div></div>
+        </div>
+
+        <form method="POST" id="bigfive-form">
+            <div class="questions-list" id="questions-list">
+                {% set traits = ['Extroversão', 'Amabilidade', 'Conscienciosidade', 'Neuroticismo', 'Abertura'] %}
+                {% for i, (question, _) in questions %}
+                    {% if i % 10 == 0 %}
+                    <div class="trait-divider">
+                        <div class="trait-divider-line"></div>
+                        <div class="trait-pill">{{ traits[i // 10] }}</div>
+                        <div class="trait-divider-line"></div>
+                    </div>
+                    {% endif %}
+
+                    <div class="question-card" id="card-{{ i }}" style="animation-delay: {{ (i % 10) * 0.03 }}s">
+                        <div class="question-num">Questão {{ i + 1 }}</div>
+                        <p class="question-text">{{ question }}</p>
+                        <div class="radio-group">
+                            {% for score in range(1, 6) %}
+                            <label class="radio-label">
+                                <input type="radio" name="q{{ i }}" value="{{ score }}"
+                                       onchange="onAnswer({{ i }}, this)">
+                                <div class="radio-btn">{{ score }}</div>
+                                <span class="radio-hint">
+                                    {% if score == 1 %}Discordo{% elif score == 5 %}Concordo{% endif %}
+                                </span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="submit-btn">Concluir Big Five →</button>
         </form>
     </div>
+
+    <script>
+        const TOTAL = 50;
+        let answered = new Set();
+
+        function onAnswer(index, input) {
+            const card = document.getElementById('card-' + index);
+            card.classList.add('answered');
+            answered.add(index);
+            updateProgress();
+
+            // Smooth scroll to next unanswered card
+            setTimeout(() => {
+                const next = document.getElementById('card-' + (index + 1));
+                if (next && !answered.has(index + 1)) {
+                    next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 120);
+        }
+
+        function updateProgress() {
+            const count = answered.size;
+            const pct = Math.round((count / TOTAL) * 100);
+            document.getElementById('progress-label').textContent = count + ' de ' + TOTAL + ' respondidas';
+            document.getElementById('progress-pct').textContent = pct + '%';
+            document.getElementById('progress-fill').style.width = pct + '%';
+        }
+    </script>
 </body>
 </html>

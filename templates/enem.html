@@ -3,28 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nota ENEM - InteressesFacul</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-zinc-950 text-zinc-100">
-    <div class="max-w-2xl mx-auto p-8">
-        <h1 class="text-4xl font-bold text-center mb-8">Sua nota do ENEM</h1>
-        <p class="text-center text-zinc-400 mb-10">Digite sua média geral do ENEM (0 a 1000) pra comparar com as notas de corte dos cursos</p>
+    <title>Nota ENEM — InteressesFacul</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        <form method="POST" class="space-y-8">
-            <div class="bg-zinc-900 p-10 rounded-3xl text-center">
-                <label for="nota_enem" class="block text-2xl mb-6">Nota ENEM:</label>
-                <input type="number" id="nota_enem" name="nota_enem" min="0" max="1000" step="0.01"
-                       class="w-48 text-5xl text-center bg-zinc-800 border border-zinc-700 rounded-xl p-4 focus:outline-none focus:border-emerald-500"
-                       placeholder="ex: 720.5" required>
+        :root {
+            --bg: #f5f5f7;
+            --surface: rgba(255,255,255,0.05);
+            --surface-hover: rgba(255,255,255,0.09);
+            --border: rgba(255,255,255,0.10);
+            --border-hover: rgba(255,255,255,0.22);
+            --text-primary: #000000;
+            --text-secondary: #1d1d1f;
+            --text-tertiary: #6e6e73;
+            --accent: #0a84ff;
+            --accent-soft: rgba(10,132,255,0.15);
+            --green: #30d158;
+            --green-soft: rgba(48,209,88,0.15);
+            --amber: #ffd60a;
+            --amber-soft: rgba(255,214,10,0.12);
+            --pink: #ff375f;
+            --radius: 20px;
+            --radius-lg: 28px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.35;
+        }
+        body::before {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, #0a84ff 0%, transparent 70%);
+            top: -200px; left: -200px;
+        }
+        body::after {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #30d158 0%, transparent 70%);
+            bottom: -150px; right: -150px;
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 80px 24px 60px;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent);
+            text-decoration: none;
+            margin-bottom: 48px;
+            animation: fadeUp 0.5s ease both;
+            transition: opacity 0.2s;
+        }
+        .back-link:hover { opacity: 0.7; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeUp 0.7s 0.05s ease both;
+        }
+
+        .logo-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--amber-soft);
+            border: 1px solid rgba(255,214,10,0.35);
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #b8860b;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            background-color: #1d1d1f;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: var(--text-tertiary);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        /* Input card */
+        .input-card {
+            background: rgba(255,255,255,0.6);
+            border: 2px solid black;
+            border-radius: var(--radius-lg);
+            padding: 40px 36px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            margin-bottom: 16px;
+            animation: fadeUp 0.7s 0.12s ease both;
+        }
+
+        .input-label {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            margin-bottom: 20px;
+        }
+
+        .nota-input {
+            width: 200px;
+            font-family: 'Figtree', sans-serif;
+            font-size: 52px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            text-align: center;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid rgba(0,0,0,0.15);
+            color: var(--text-primary);
+            outline: none;
+            padding: 4px 0 8px;
+            transition: border-color 0.2s;
+            -moz-appearance: textfield;
+        }
+        .nota-input::-webkit-outer-spin-button,
+        .nota-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+        .nota-input::placeholder { color: rgba(0,0,0,0.15); }
+        .nota-input:focus { border-bottom-color: var(--accent); }
+
+        .input-hint {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-top: 16px;
+        }
+
+        /* Range visual */
+        .range-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 28px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(0,0,0,0.07);
+        }
+        .range-item {
+            text-align: center;
+            flex: 1;
+        }
+        .range-num {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+        }
+        .range-desc {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+        .range-divider {
+            width: 1px;
+            height: 32px;
+            background: rgba(0,0,0,0.1);
+        }
+
+        /* Submit button */
+        .submit-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #000;
+            color: #fff;
+            font-family: 'Figtree', sans-serif;
+            font-weight: 700;
+            font-size: 17px;
+            letter-spacing: -0.01em;
+            padding: 20px 40px;
+            border-radius: var(--radius-lg);
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            animation: fadeUp 0.7s 0.2s ease both;
+        }
+        .submit-btn:hover { opacity: 0.82; transform: translateY(-1px); }
+        .submit-btn:active { transform: translateY(0); opacity: 1; }
+
+        /* Footer hint */
+        .footer-hint {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-top: 20px;
+            animation: fadeUp 0.7s 0.28s ease both;
+        }
+
+        /* Flash messages */
+        .flash {
+            margin-bottom: 20px;
+            padding: 14px 20px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 500;
+            animation: fadeUp 0.4s ease both;
+        }
+        .flash.success { background: var(--green-soft); border: 1px solid rgba(48,209,88,0.3); color: #1a7a35; }
+        .flash.danger  { background: rgba(255,55,95,0.10); border: 1px solid rgba(255,55,95,0.3); color: var(--pink); }
+        .flash.warning { background: var(--amber-soft); border: 1px solid rgba(255,214,10,0.3); color: #8a6c00; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for cat, msg in messages %}
+            <div class="flash {{ cat }}">{{ msg }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <a href="/" class="back-link">← Voltar ao início</a>
+
+        <header class="header">
+            <div class="logo-pill">💡 Passo 3 de 3</div>
+            <h1>Sua nota do ENEM</h1>
+            <p>Informe sua média para comparar<br>com as notas de corte dos cursos.</p>
+        </header>
+
+        <form method="POST">
+            <div class="input-card">
+                <p class="input-label">Média geral (0 – 1000)</p>
+                <input
+                    type="number"
+                    id="nota_enem"
+                    name="nota_enem"
+                    class="nota-input"
+                    min="0" max="1000" step="0.01"
+                    placeholder="720"
+                    required
+                    autofocus
+                >
+                <p class="input-hint">Digite sua média ponderada (áreas + redação)</p>
+
+                <div class="range-wrap">
+                    <div class="range-item">
+                        <div class="range-num">0</div>
+                        <div class="range-desc">Mínimo</div>
+                    </div>
+                    <div class="range-divider"></div>
+                    <div class="range-item">
+                        <div class="range-num">500</div>
+                        <div class="range-desc">Média nacional</div>
+                    </div>
+                    <div class="range-divider"></div>
+                    <div class="range-item">
+                        <div class="range-num">1000</div>
+                        <div class="range-desc">Máximo</div>
+                    </div>
+                </div>
             </div>
 
-            <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold py-6 text-2xl rounded-3xl">
-                Registrar e Continuar →
+            <button type="submit" class="submit-btn">
+                Registrar e continuar →
             </button>
         </form>
 
-        <p class="text-center text-zinc-500 mt-8 text-sm">Use a nota oficial do seu boletim ENEM (média ponderada das áreas + redação)</p>
+        <p class="footer-hint">Use a nota do seu boletim oficial do ENEM</p>
     </div>
 </body>
 </html>

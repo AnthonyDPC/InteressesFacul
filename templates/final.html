@@ -1,116 +1,405 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Seus Resultados - InteressesFacul</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seus Resultados — InteressesFacul</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  </head>
-  <body class="bg-zinc-950 text-zinc-100">
-    <div class="max-w-5xl mx-auto p-8">
-      <h1 class="text-5xl font-bold text-center mb-4">
-        🎉 Seus resultados completos
-      </h1>
-      <p class="text-center text-zinc-400 text-xl mb-12">
-        Aqui estão suas recomendações de cursos!
-      </p>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-      <!-- Gráficos -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-        <div class="bg-zinc-900 p-8 rounded-3xl">
-          <h2 class="text-2xl font-semibold mb-6">Big Five (Personalidade)</h2>
-          <canvas id="bigfiveChart" height="180"></canvas>
+        :root {
+            --bg: #000;
+            --surface: rgba(255,255,255,0.05);
+            --surface-hover: rgba(255,255,255,0.08);
+            --border: rgba(255,255,255,0.09);
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --text-tertiary: #6e6e73;
+            --accent: #0a84ff;
+            --green: #30d158;
+            --green-soft: rgba(48,209,88,0.12);
+            --amber: #ffd60a;
+            --amber-soft: rgba(255,214,10,0.10);
+            --red: #ff453a;
+            --red-soft: rgba(255,69,58,0.10);
+            --radius: 20px;
+            --radius-lg: 24px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            width: 700px; height: 700px;
+            background: radial-gradient(circle, rgba(10,132,255,0.18) 0%, transparent 70%);
+            top: -200px; left: -200px;
+            border-radius: 50%;
+            pointer-events: none; z-index: 0;
+        }
+
+        .wrapper {
+            position: relative; z-index: 1;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 72px 24px 80px;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 64px;
+            animation: fadeUp 0.7s ease both;
+        }
+        .hero-eyebrow {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+        .hero h1 {
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            background: linear-gradient(150deg, #fff 40%, #6e6e73 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 14px;
+        }
+        .hero p {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+        .hero-nota {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            background: rgba(255,214,10,0.10);
+            border: 1px solid rgba(255,214,10,0.2);
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--amber);
+        }
+
+        /* Charts grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 56px;
+            animation: fadeUp 0.7s 0.1s ease both;
+        }
+        @media (max-width: 640px) { .charts-grid { grid-template-columns: 1fr; } }
+
+        .chart-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            backdrop-filter: blur(20px);
+        }
+        .chart-card h3 {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            margin-bottom: 20px;
+        }
+
+        /* Section labels */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            animation: fadeUp 0.7s 0.2s ease both;
+        }
+        .section-label h2 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .section-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .dot-green { background: var(--green); box-shadow: 0 0 8px var(--green); }
+        .dot-red   { background: var(--red);   box-shadow: 0 0 8px var(--red); }
+
+        /* Course cards */
+        .courses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 56px;
+        }
+
+        .course-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            backdrop-filter: blur(20px);
+            animation: fadeUp 0.6s ease both;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .course-card:hover {
+            background: var(--surface-hover);
+            border-color: rgba(255,255,255,0.16);
+        }
+
+        .course-card.good  { border-left: 3px solid var(--green); }
+        .course-card.ok    { border-left: 3px solid var(--amber); }
+        .course-card.hard  { border-left: 3px solid var(--red); }
+        .course-card.bad   { border-left: 3px solid rgba(255,255,255,0.12); opacity: 0.6; }
+
+        .course-info { flex: 1; }
+        .course-name {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-bottom: 4px;
+        }
+        .course-status { font-size: 13px; margin-bottom: 4px; }
+        .status-green { color: var(--green); }
+        .status-amber { color: var(--amber); }
+        .status-red   { color: var(--red); }
+
+        .course-meta {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .score-badge {
+            flex-shrink: 0;
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center; justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+        }
+        .score-green { background: var(--green-soft); color: var(--green); border: 1px solid rgba(48,209,88,0.2); }
+        .score-amber { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(255,214,10,0.2); }
+        .score-red   { background: var(--red-soft);   color: var(--red);   border: 1px solid rgba(255,69,58,0.2); }
+        .score-dim   { background: rgba(255,255,255,0.04); color: var(--text-tertiary); border: 1px solid var(--border); }
+
+        /* Back */
+        .footer-back {
+            text-align: center;
+            animation: fadeUp 0.7s 0.5s ease both;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 100px;
+            border: 1px solid rgba(10,132,255,0.25);
+            background: rgba(10,132,255,0.08);
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .back-btn:hover {
+            background: rgba(10,132,255,0.15);
+            border-color: rgba(10,132,255,0.45);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Stagger course cards */
+        .course-card:nth-child(1) { animation-delay: 0.05s; }
+        .course-card:nth-child(2) { animation-delay: 0.10s; }
+        .course-card:nth-child(3) { animation-delay: 0.15s; }
+        .course-card:nth-child(4) { animation-delay: 0.20s; }
+        .course-card:nth-child(5) { animation-delay: 0.25s; }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <!-- Hero -->
+    <div class="hero">
+        <p class="hero-eyebrow">Análise completa</p>
+        <h1>Seus resultados</h1>
+        <p>Combinamos personalidade, interesses e desempenho para você.</p>
+        <div class="hero-nota">
+            🎯 Nota ENEM: {{ session.enem|default(0) }} pontos
         </div>
-        <div class="bg-zinc-900 p-8 rounded-3xl">
-          <h2 class="text-2xl font-semibold mb-6">Interesses RIASEC</h2>
-          <canvas id="riasecChart" height="180"></canvas>
-        </div>
-      </div>
-
-      <!-- Cursos recomendados -->
-      <div class="mb-16">
-        <h2 class="text-3xl font-bold text-emerald-400 mb-8">
-          ✅ Cursos que mais combinam com você
-        </h2>
-        <p class="text-zinc-400 mb-6">
-          Sua nota ENEM:
-          <span class="font-bold text-amber-400"
-            >{{ session.enem|default(0) }}</span
-          >
-        </p>
-        <div class="grid gap-6">
-          {% for curso in top_jobs %}
-          <div
-            class="bg-zinc-900 p-8 rounded-3xl border-l-8 {{ curso.color }} border-opacity-70"
-          >
-            <h3 class="text-3xl font-semibold mb-2">{{ curso.name }}</h3>
-            <p class="text-xl {{ curso.color }} mb-2">{{ curso.status }}</p>
-            <p class="text-zinc-400">
-              Nota de corte média aproximada: {{ curso.corte }} pontos
-            </p>
-            <p class="text-zinc-500 mt-2">
-              Dificuldade esperada: {{ curso.dificuldade }}
-            </p>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-
-      <!-- Similar pros ruins, se quiser mostrar -->
-
-      <!-- Cursos que não combinam -->
-      <div>
-        <h2 class="text-3xl font-bold text-red-400 mb-8">
-          ❌ Cursos que não são ideais
-        </h2>
-        <div class="grid gap-6">
-          {% for course in bad_fits %}
-          <div
-            class="bg-red-900/30 border border-red-500 p-8 rounded-3xl opacity-75"
-          >
-            <h3 class="text-3xl font-semibold">{{ course.name }}</h3>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-
-      <div class="text-center mt-16">
-        <a href="/" class="text-emerald-400 hover:underline"
-          >← Voltar ao início e refazer</a
-        >
-      </div>
     </div>
 
-    <script>
-      // Big Five Radar
-      new Chart(document.getElementById('bigfiveChart'), {
-          type: 'radar',
-          data: {
-              labels: ['Extroversão', 'Amabilidade', 'Conscienciosidade', 'Neuroticismo', 'Abertura'],
-              datasets: [{
-                  label: 'Seu perfil',
-                  data: [{{ bigfive.E|default(50) }}, {{ bigfive.A|default(50) }}, {{ bigfive.C|default(50) }}, {{ bigfive.N|default(50) }}, {{ bigfive.O|default(50) }}],
-                  backgroundColor: 'rgba(16, 185, 129, 0.3)',
-                  borderColor: '#10b981',
-                  borderWidth: 3
-              }]
-          },
-          options: { scales: { r: { min: 0, max: 100 }} }
-      });
+    <!-- Charts -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Big Five — Personalidade</h3>
+            <canvas id="bigfiveChart" height="220"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Interesses RIASEC</h3>
+            <canvas id="riasecChart" height="220"></canvas>
+        </div>
+    </div>
 
-      // RIASEC Bar
-      new Chart(document.getElementById('riasecChart'), {
-          type: 'bar',
-          data: {
-              labels: ['Realista', 'Investigativo', 'Artístico', 'Social', 'Empreendedor', 'Convencional'],
-              datasets: [{
-                  label: 'Seu interesse',
-                  data: [70,85,60,75,55,40],  // exemplo - substitua pelas variáveis reais depois
-                  backgroundColor: '#ec4899'
-              }]
-          }
-      });
-    </script>
-  </body>
+    <!-- Recomendados -->
+    <div class="section-label">
+        <div class="section-dot dot-green"></div>
+        <h2>Cursos que combinam com você</h2>
+    </div>
+    <div class="courses-list">
+        {% for curso in top_jobs %}
+        {% if curso.diff > 50 %}
+            {% set card_class = "good" %}{% set score_class = "score-green" %}{% set status_class = "status-green" %}
+        {% elif curso.diff > -20 %}
+            {% set card_class = "ok" %}{% set score_class = "score-amber" %}{% set status_class = "status-amber" %}
+        {% else %}
+            {% set card_class = "hard" %}{% set score_class = "score-red" %}{% set status_class = "status-red" %}
+        {% endif %}
+        <div class="course-card {{ card_class }}">
+            <div class="course-info">
+                <div class="course-name">{{ curso.name }}</div>
+                <div class="course-status {{ status_class }}">{{ curso.status }}</div>
+                <div class="course-meta">Corte médio: {{ curso.corte }} pts · Dificuldade: {{ curso.dificuldade }}</div>
+            </div>
+            <div class="score-badge {{ score_class }}">{{ curso.match_score }}%</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Não recomendados -->
+    <div class="section-label">
+        <div class="section-dot dot-red"></div>
+        <h2>Cursos menos compatíveis</h2>
+    </div>
+    <div class="courses-list">
+        {% for curso in bad_fits %}
+        <div class="course-card bad">
+            <div class="course-info">
+                <div class="course-name">{{ curso.name }}</div>
+                <div class="course-meta">Corte médio: {{ curso.corte }} pts</div>
+            </div>
+            <div class="score-badge score-dim">{{ curso.match_score }}%</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="footer-back">
+        <a href="/" class="back-btn">← Voltar ao início</a>
+    </div>
+
+</div>
+
+<script>
+// Big Five Radar
+const radarCtx = document.getElementById('bigfiveChart').getContext('2d');
+new Chart(radarCtx, {
+    type: 'radar',
+    data: {
+        labels: ['Extroversão', 'Amabilidade', 'Conscienciosidade', 'Neuroticismo', 'Abertura'],
+        datasets: [{
+            label: 'Perfil',
+            data: [
+                {{ bigfive.E|default(50) }},
+                {{ bigfive.A|default(50) }},
+                {{ bigfive.C|default(50) }},
+                {{ bigfive.N|default(50) }},
+                {{ bigfive.O|default(50) }}
+            ],
+            backgroundColor: 'rgba(10,132,255,0.15)',
+            borderColor: '#0a84ff',
+            borderWidth: 2,
+            pointBackgroundColor: '#0a84ff',
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+            r: {
+                min: 0, max: 100,
+                ticks: { color: '#6e6e73', font: { size: 10 }, stepSize: 25, backdropColor: 'transparent' },
+                grid: { color: 'rgba(255,255,255,0.07)' },
+                angleLines: { color: 'rgba(255,255,255,0.07)' },
+                pointLabels: { color: '#a1a1a6', font: { size: 11, family: 'Figtree' } }
+            }
+        }
+    }
+});
+
+// RIASEC Bar
+const barCtx = document.getElementById('riasecChart').getContext('2d');
+new Chart(barCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Realista', 'Investigativo', 'Artístico', 'Social', 'Empreend.', 'Convencional'],
+        datasets: [{
+            data: [
+                {{ session.interests.raw.R|default(50) }},
+                {{ session.interests.raw.I|default(85) }},
+                {{ session.interests.raw.A|default(60) }},
+                {{ session.interests.raw.S|default(75) }},
+                {{ session.interests.raw.E|default(55) }},
+                {{ session.interests.raw.C|default(40) }}
+            ],
+            backgroundColor: [
+                'rgba(10,132,255,0.7)',
+                'rgba(48,209,88,0.7)',
+                'rgba(255,55,95,0.7)',
+                'rgba(255,159,10,0.7)',
+                'rgba(100,210,255,0.7)',
+                'rgba(191,148,228,0.7)'
+            ],
+            borderRadius: 8,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+            x: {
+                ticks: { color: '#a1a1a6', font: { size: 10, family: 'Figtree' } },
+                grid: { display: false },
+                border: { display: false }
+            },
+            y: {
+                ticks: { color: '#6e6e73', font: { size: 10 } },
+                grid: { color: 'rgba(255,255,255,0.06)' },
+                border: { display: false }
+            }
+        }
+    }
+});
+</script>
+</body>
 </html>
